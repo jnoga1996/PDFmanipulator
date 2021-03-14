@@ -1,14 +1,34 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Getting Started: Serving Web Content</title>
+    <title>Merge PDF</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link th:href="@{/css/main.css}" rel="stylesheet" />
     <script type="text/javascript" th:src="@{/js/test.js}"></script>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.0.0-beta2/css/bootstrap.min.css}" />
+    <script th:src="@{/webjars/jquery/5.0.0-beta2/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/5.0.0-beta2/js/bootstrap.min.js}"></script>
 </head>
 <body>
-<p>Please select files to merge</p>
-<input type="file" id="file1" name="file1">
-<input type="file" id="file2" name="file2">
+
+<h1>Please select PDF files to merge</h1>
+
+<form th:action="@{/home/merge}" th:object="${pdfMergeInput}" method="post">
+    <div class="col-sm-3 form-group">
+        <label>First file</label>
+        <input type="file" id="file1" name="file2" class="form-control" th:field="*{file1}">
+    </div>
+    <div class="col-sm-3 form-group">
+        <label>Second file</label>
+        <input type="file" id="file2" name="file2" class="form-control" th:field="*{file2}">
+    </div>
+    <div class="form-row">
+        <div class="form-group col-sm-3">
+            <label>Result file name</label>
+            <input type="text" class="form-control" th:field="*{fileName}">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
 </body>
 </html>

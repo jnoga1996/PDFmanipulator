@@ -2,3 +2,5 @@ spring:
   devtools:
     restart:
       enabled: true
+scheduler:
+  intervalInMinutes : 5

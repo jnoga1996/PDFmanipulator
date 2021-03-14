@@ -24,4 +24,13 @@ public class PdfService {
         pdfMergerUtility.mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly());
     }
 
+    public File getMergedFile(String fileName) {
+        if (fileName == null) {
+            throw new IllegalStateException("File name is null!");
+        }
+        File mergedFile = new File(FILE_DIRECTORY + fileName);
+        System.out.println("Fetched file: " + mergedFile.getName());
+        return mergedFile;
+    }
+
 }

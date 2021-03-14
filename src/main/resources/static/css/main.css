@@ -1,3 +1,5 @@
-p {
-    font-family: sans-serif;
+.spaced {
+    margin-top: 5px,
+    margin-bottom: 5px,
+    padding: 5px 5px 5px 5px;
 }
