@@ -19,7 +19,6 @@ public class FileRemoverUtil {
     }
 
     public static boolean isOlderThan(Path path) {
-        System.out.println("Interval = " + intervalInMinutes);
         LocalDateTime currentTime = LocalDateTime.now();
         return path.toFile().lastModified() > currentTime.minusMinutes(intervalInMinutes).toEpochSecond(ZoneOffset.UTC);
     }

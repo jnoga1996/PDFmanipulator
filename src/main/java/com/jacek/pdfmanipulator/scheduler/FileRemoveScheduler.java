@@ -8,14 +8,17 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
 @Component
 public class FileRemoveScheduler {
 
-    @Scheduled(fixedRate = 1000)
+    private static final long INTERVAL = 1000 * 60;
+
+    @Scheduled(fixedRate = INTERVAL)
     public void tick() throws IOException {
-        System.out.println("New tick");
+        System.out.println("FileRemover started work at:" + LocalDateTime.now());
         Stream<Path> paths = Files.walk(Paths.get("src/main/resources/out"));
         paths.filter(p -> p != null)
                 .filter(Files::isRegularFile)
