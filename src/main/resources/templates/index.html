@@ -13,19 +13,19 @@
 
 <h1>Please select PDF files to merge</h1>
 
-<form th:action="@{/home/merge}" th:object="${pdfMergeInput}" method="post">
+<form th:action="@{/home/merge}" method="post" enctype="multipart/form-data">
     <div class="col-sm-3 form-group">
         <label>First file</label>
-        <input type="file" id="file1" name="file2" class="form-control" th:field="*{file1}">
+        <input type="file" id="file1" name="file1" class="form-control">
     </div>
     <div class="col-sm-3 form-group">
         <label>Second file</label>
-        <input type="file" id="file2" name="file2" class="form-control" th:field="*{file2}">
+        <input type="file" id="file2" name="file2" class="form-control">
     </div>
     <div class="form-row">
         <div class="form-group col-sm-3">
             <label>Result file name</label>
-            <input type="text" class="form-control" th:field="*{fileName}">
+            <input type="text" class="form-control" name="resultFileName">
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>
