@@ -15,11 +15,12 @@ import java.util.stream.Stream;
 public class FileRemoveScheduler {
 
     private static final long INTERVAL = 1000 * 60;
+    private static final Path FILE_DIR = Paths.get("storage");
 
     @Scheduled(fixedRate = INTERVAL)
     public void tick() throws IOException {
         System.out.println("FileRemover started work at:" + LocalDateTime.now());
-        Stream<Path> paths = Files.walk(Paths.get("src/main/resources/out"));
+        Stream<Path> paths = Files.walk(FILE_DIR);
         paths.filter(p -> p != null)
                 .filter(Files::isRegularFile)
                 .filter(FileRemoverUtil::shouldBeRemoved)

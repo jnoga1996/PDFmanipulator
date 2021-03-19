@@ -49,6 +49,16 @@ public class FileStorageService implements FileStorage {
     }
 
     @Override
+    public void delete(String fileName) {
+        try {
+            String target = getTargetFileName(fileName);
+            FileSystemUtils.deleteRecursively(Paths.get(target));
+        } catch (IOException e) {
+            System.out.println("Error while removing file: " + fileName);
+        }
+    }
+
+    @Override
     public void deleteAll() {
         try {
             FileSystemUtils.deleteRecursively(rootLocation);
@@ -74,5 +84,9 @@ public class FileStorageService implements FileStorage {
         } catch (IOException e) {
             throw new RuntimeException("Error while getting files!\n" + e.getMessage());
         }
+    }
+
+    private String getTargetFileName(String fileName) {
+        return rootLocation.toString() + "/" + fileName;
     }
 }
