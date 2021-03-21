@@ -9,17 +9,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.stream.Stream;
 
 @Component
 public class FileRemoveScheduler {
 
-    private static final long INTERVAL = 1000 * 60;
-    private static final Path FILE_DIR = Paths.get("storage");
+    private final static long INTERVAL_ONE_MINUTE = 1000 * 60;
+    private final static long INTERVAL_IN_MINUTES = 5 * INTERVAL_ONE_MINUTE;
+    private final static Path FILE_DIR = Paths.get("storage");
 
-    @Scheduled(fixedRate = INTERVAL)
+    @Scheduled(fixedRate = INTERVAL_IN_MINUTES)
     public void tick() throws IOException {
-        System.out.println("FileRemover started work at:" + LocalDateTime.now());
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        String formattedDateTime = dateTimeFormatter.format(currentDateTime);
+        System.out.println("FileRemover started work at: " + formattedDateTime);
         Stream<Path> paths = Files.walk(FILE_DIR);
         paths.filter(p -> p != null)
                 .filter(Files::isRegularFile)
