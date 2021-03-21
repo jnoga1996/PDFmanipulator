@@ -19,10 +19,6 @@ public class FileStorageService implements FileStorage {
 
     private final Path rootLocation = Paths.get("storage");
 
-    public FileStorageService() {
-        init();
-    }
-
     @Override
     public void store(MultipartFile file) {
         try {
