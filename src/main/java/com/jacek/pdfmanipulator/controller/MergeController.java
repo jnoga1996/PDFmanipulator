@@ -1,6 +1,5 @@
 package com.jacek.pdfmanipulator.controller;
 
-import com.jacek.pdfmanipulator.model.PdfMergeInput;
 import com.jacek.pdfmanipulator.service.FileStorageService;
 import com.jacek.pdfmanipulator.service.PdfService;
 import com.jacek.pdfmanipulator.validator.FileValidator;
@@ -15,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.security.SecureRandom;
 
 @Controller
 @RequestMapping("/merge")
@@ -32,48 +32,15 @@ public class MergeController {
     }
 
     @GetMapping("/")
-    public String index(Model model) {
-        model.addAttribute("pdfMergeInput", new PdfMergeInput());
+    public String index() {
         return "index";
     }
 
     @PostMapping(value = "/", produces = MediaType.APPLICATION_PDF_VALUE)
     public @ResponseBody byte[] merge(@RequestParam("file1") MultipartFile uploadedFile1,
-                                      @RequestParam("file2") MultipartFile uploadedFile2,
-                                      @RequestParam("resultFileName") String resultFileName) throws Exception {
+                                      @RequestParam("file2") MultipartFile uploadedFile2) throws Exception {
 
-        LOG.info("File1: " + uploadedFile1.getOriginalFilename());
-        LOG.info("File2: " + uploadedFile2.getOriginalFilename());
-        fileStorageService.store(uploadedFile1);
-        fileStorageService.store(uploadedFile2);
-        File file1 = fileStorageService.loadFile(uploadedFile1.getOriginalFilename()).getFile();
-        File file2 = fileStorageService.loadFile(uploadedFile2.getOriginalFilename()).getFile();
-        FileValidator file1Validator = new FileValidator(file1);
-        FileValidator file2Validator = new FileValidator(file2);
-        if (!file1Validator.isValid()) {
-            String message = "First file is incorrect! " + file1Validator.getMessage();
-            LOG.warn(message);
-            throw new IllegalStateException(message);
-        }
-        if (!file2Validator.isValid()) {
-            String message = "Second file is incorrect! " + file2Validator.getMessage();
-            LOG.warn(message);
-            throw new IllegalStateException(message);
-        }
-
-        if (FileValidator.isEmpty(resultFileName)) {
-            String message = "Result file name is empty!";
-            LOG.warn(message);
-            throw new IllegalStateException(message);
-        }
-
-        if (!resultFileName.toUpperCase().contains(".PDF")) {
-            resultFileName += ".PDF";
-        }
-
-        pdfService.merge(file1.getName(), file2.getName(), resultFileName);
-        File mergedFile = pdfService.getMergedFile(resultFileName);
-        return Files.readAllBytes(mergedFile.toPath());
+        return pdfService.process(uploadedFile1, uploadedFile2);
     }
 
     @ExceptionHandler(Exception.class)

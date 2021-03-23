@@ -8,9 +8,9 @@ import java.util.stream.Stream;
 
 public interface FileStorage {
 
-    void store(MultipartFile file);
+    void store(MultipartFile file, int securityHash);
 
-    Resource loadFile(String filename);
+    Resource loadFile(String filename, int securityHash);
 
     void deleteAll();
 
