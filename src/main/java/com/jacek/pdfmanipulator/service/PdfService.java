@@ -1,5 +1,7 @@
 package com.jacek.pdfmanipulator.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.pdfbox.io.MemoryUsageSetting;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import java.nio.file.Paths;
 @Service
 public class PdfService {
 
+    private final static Logger LOG = LogManager.getLogger(PdfService.class);
     private final static Path FILE_DIRECTORY = Paths.get("storage");
 
     public void merge(String fileName1, String fileName2, String mergedFileName) throws IOException {
@@ -19,7 +22,7 @@ public class PdfService {
 
         PDFMergerUtility pdfMergerUtility = new PDFMergerUtility();
         String destinationPath = generatePathToFile(mergedFileName);
-        System.out.println("Generating file:" + destinationPath);
+        LOG.info("Generating file:" + destinationPath);
         pdfMergerUtility.setDestinationFileName(destinationPath);
 
         pdfMergerUtility.addSource(file1);
@@ -34,10 +37,12 @@ public class PdfService {
 
     public File getMergedFile(String fileName) {
         if (fileName == null) {
-            throw new IllegalStateException("File name is null!");
+            String error = "File name is null!";
+            LOG.warn(error);
+            throw new IllegalStateException(error);
         }
         File mergedFile = new File(generatePathToFile(fileName));
-        System.out.println("Fetched file: " + mergedFile.getName());
+        LOG.info("Fetched file: " + mergedFile.getName());
         return mergedFile;
     }
 

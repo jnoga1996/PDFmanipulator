@@ -1,5 +1,7 @@
 package com.jacek.pdfmanipulator.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -19,13 +21,15 @@ public class FileStorageService implements FileStorage {
 
     private final Path rootLocation = Paths.get("storage");
 
+    private final static Logger LOG = LogManager.getLogger(FileStorageService.class);
+
     @Override
     public void store(MultipartFile file) {
         try {
             Path targetPath = rootLocation.resolve(file.getOriginalFilename());
             Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            System.out.println("Error occurred while saving file:" + file.getOriginalFilename() + "\n" + e.getMessage());
+        } catch (IOException ex) {
+            LOG.error("Error occurred while saving file:" + file.getOriginalFilename(), ex);
         }
     }
 
@@ -37,10 +41,14 @@ public class FileStorageService implements FileStorage {
             if (resource.exists() || resource.isReadable()) {
                 return resource;
             } else {
-                throw new RuntimeException("File does not exist or is not readable!");
+                String error = "File does not exist or is not readable!";
+                LOG.error(error);
+                throw new RuntimeException(error);
             }
         } catch (MalformedURLException e) {
-            throw new RuntimeException("Error while loading file: " + filename + "!\n" + e.getMessage());
+            String error = "Error while loading file: " + filename + "!";
+            LOG.error(error, e);
+            throw new RuntimeException(error);
         }
     }
 
@@ -49,8 +57,8 @@ public class FileStorageService implements FileStorage {
         try {
             String target = getTargetFileName(fileName);
             FileSystemUtils.deleteRecursively(Paths.get(target));
-        } catch (IOException e) {
-            System.out.println("Error while removing file: " + fileName);
+        } catch (IOException ex) {
+            LOG.error("Error while removing file: " + fileName, ex);
         }
     }
 
@@ -58,8 +66,8 @@ public class FileStorageService implements FileStorage {
     public void deleteAll() {
         try {
             FileSystemUtils.deleteRecursively(rootLocation);
-        } catch (IOException e) {
-            System.out.println("Error when removing storage folder!\n " + e.getMessage());
+        } catch (IOException ex) {
+            LOG.error("Error when removing storage folder!", ex);
         }
     }
 
@@ -67,8 +75,8 @@ public class FileStorageService implements FileStorage {
     public void init() {
         try {
             Files.createDirectories(rootLocation);
-        } catch (IOException e) {
-            System.out.println("Error when initializing storage!\n " + e.getMessage());
+        } catch (IOException ex) {
+            LOG.error("Error when initializing storage!", ex);
         }
     }
 
@@ -77,8 +85,8 @@ public class FileStorageService implements FileStorage {
         try {
             return Files.walk(rootLocation, 1).filter(path -> !path.equals(rootLocation))
                     .map(rootLocation::relativize);
-        } catch (IOException e) {
-            throw new RuntimeException("Error while getting files!\n" + e.getMessage());
+        } catch (IOException ex) {
+            throw new RuntimeException("Error while getting files!");
         }
     }
 
