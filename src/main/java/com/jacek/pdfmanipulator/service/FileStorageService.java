@@ -24,9 +24,9 @@ public class FileStorageService implements FileStorage {
     private final static Logger LOG = LogManager.getLogger(FileStorageService.class);
 
     @Override
-    public void store(MultipartFile file) {
+    public void store(MultipartFile file, int securityHash) {
         try {
-            Path targetPath = rootLocation.resolve(file.getOriginalFilename());
+            Path targetPath = rootLocation.resolve(securityHash + file.getOriginalFilename());
             Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
             LOG.error("Error occurred while saving file:" + file.getOriginalFilename(), ex);
@@ -34,9 +34,9 @@ public class FileStorageService implements FileStorage {
     }
 
     @Override
-    public Resource loadFile(String filename) {
+    public Resource loadFile(String filename, int securityHash) {
         try {
-            Path file = rootLocation.resolve(filename);
+            Path file = rootLocation.resolve(securityHash + filename);
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
                 return resource;
