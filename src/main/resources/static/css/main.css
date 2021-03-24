@@ -1,0 +1,8 @@
+.alert {
+    color:red;
+    text-align:right;
+}
+
+.hidden-div {
+    display:none;
+}
