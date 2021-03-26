@@ -1,3 +1,11 @@
+body {
+    background-color: #2eabd1;
+}
+
+.inner {
+    background-color: #a5b3b7;
+}
+
 .alert {
     color:red;
     text-align:right;

@@ -19,3 +19,17 @@ function checkFileSize(fileInput) {
         }
     }
 }
+
+function checkFileNotEmpty(fileInput1, fileInput2) {
+    let element1 = document.getElementById(fileInput1);
+    let element2 = document.getElementById(fileInput2);
+    let saveButton = document.getElementById('save');
+    console.log('file1 = ' + element1.files[0] + ', file2 = ' + element2.files[0]);
+    var shouldDisableButton = element1.files[0] == null && element2.files[0] == null;
+    if (shouldDisableButton) {
+        saveButton.disabled = shouldDisableButton;
+        alert('One or both files are empty!\nPlease upload them to proceed.');
+    } else {
+        saveButton.disabled = false;
+    }
+}
