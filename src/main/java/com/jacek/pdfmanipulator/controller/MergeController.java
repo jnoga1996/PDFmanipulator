@@ -2,7 +2,6 @@ package com.jacek.pdfmanipulator.controller;
 
 import com.jacek.pdfmanipulator.service.FileStorageService;
 import com.jacek.pdfmanipulator.service.PdfService;
-import com.jacek.pdfmanipulator.validator.FileValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.nio.file.Files;
-import java.security.SecureRandom;
 
 @Controller
 @RequestMapping("/merge")
@@ -49,6 +44,5 @@ public class MergeController {
         model.addAttribute("error", ex.getMessage());
         return "error";
     }
-
 
 }
